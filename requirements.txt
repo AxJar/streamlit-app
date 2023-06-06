@@ -3,6 +3,5 @@ streamlit
 plotly
 seaborn
 matplotlib
-re
 numpy
 PIL
