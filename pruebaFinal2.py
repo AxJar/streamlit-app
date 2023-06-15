@@ -47,7 +47,7 @@ def encode_column(df, column_name):
         df[column_name] = le.fit_transform(df[column_name].astype(str))
     return df
 
-
+"""
 def inicio():
     df = get_data()
     csv = convert_df(df)
@@ -56,7 +56,35 @@ def inicio():
     image = Image.open('traffic_light.png')
     st.image(image, caption='Traffico de Guadalajara')
     st.text("Brenda Cristina Yepiz\nHéctor Calderón Reyes\nAxel Jarquín\nJohn Paul Cueva Osete")
+"""
+def inicio():
+    df = get_data()
+    csv = convert_df(df)
+    st.title("Equipo 1")
+    st.header("Accidentes de Tráfico en Jalisco")
+    image = Image.open('traffic_light.png')
+    st.image(image, caption='Traffico de Guadalajara')
 
+    st.header("Nuestro Equipo")
+
+    col1, col2, col3, col4 = st.beta_columns(4)
+
+    with col1:
+        st.header("Brenda Cristina Yepiz")
+        st.image("Brenda.jpg")  # Asegúrate de tener la imagen en la ruta especificada
+
+    with col2:
+        st.header("Héctor Calderón Reyes")
+        st.image("Hector.jpg")  # Asegúrate de tener la imagen en la ruta especificada
+
+    with col3:
+        st.header("Axel Jarquín")
+        st.image("Axel.jpg")  # Asegúrate de tener la imagen en la ruta especificada
+
+    with col4:
+        st.header("John Paul Cueva Osete")
+        st.image("JP.jpg")  # Asegúrate de tener la imagen en la ruta especificada
+        
 def datos():
     df = get_data()
     csv = convert_df(df)
