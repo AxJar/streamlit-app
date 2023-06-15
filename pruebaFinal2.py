@@ -565,7 +565,15 @@ def prediccion():
     st.markdown("---")
     st.markdown("### Modelo predictivo de Regresión Logística sobre dileso")
     regresionLog()
-
+    
+PAGES = {
+    "Inicio": inicio,
+    "Datos": datos,
+    "Mapa": mapa,
+    "Análisis": analisis,
+    "Visualizaciones": visualizaciones,
+    "Predicción": prediccion
+}
 def main():
     st.sidebar.title("Navegación")
     selection = st.sidebar.radio("Ir a:", list(PAGES.keys()))
