@@ -445,18 +445,18 @@ def prediccion():
     st.markdown("---")
     st.markdown("### Resultados de las predicciones")
     if logistic_regression_prediction[0] == 1:
-        st.markdown("<span style='color:green'>✅ Modelo de regresión logista predice que esta persona saldría ilesa del accidente</span>", unsafe_allow_html=True)
+        st.markdown("<span style='color:green'>😁 Modelo de regresión logista predice que esta persona saldría ilesa del accidente</span>", unsafe_allow_html=True)
     elif logistic_regression_prediction == 2:
-        st.markdown("<span style='color:red'>❌ Modelo de regresión logista predice que esta persona saldría herida del accidente</span>", unsafe_allow_html=True)
+        st.markdown("<span style='color:red'>😵‍💫 Modelo de regresión logista predice que esta persona saldría herida del accidente</span>", unsafe_allow_html=True)
     else:
-        st.markdown("<span style='color:red'>❌ Modelo de regresión logista predice que esta persona saldría muerta del accidente</span>", unsafe_allow_html=True)
+        st.markdown("<span style='color:red'>☠ Modelo de regresión logista predice que esta persona saldría muerta del accidente</span>", unsafe_allow_html=True)
 
     if classification_tree_prediction[0] == 1:
-        st.markdown("<span style='color:green'>✅ Modelo árbol de decisión predice que esta persona saldría ilesa del accidente</span>", unsafe_allow_html=True)
+        st.markdown("<span style='color:green'>😁 Modelo árbol de decisión predice que esta persona saldría ilesa del accidente</span>", unsafe_allow_html=True)
     elif classification_tree_prediction == 2:
-        st.markdown("<span style='color:red'>❌ Modelo árbol de decisión predice que esta persona saldría herida del accidente</span>", unsafe_allow_html=True)
+        st.markdown("<span style='color:red'>😵‍💫 Modelo árbol de decisión predice que esta persona saldría herida del accidente</span>", unsafe_allow_html=True)
     else:
-        st.markdown("<span style='color:red'>❌ Modelo árbol de decisión predice que esta persona saldría muerta del accidente</span>", unsafe_allow_html=True)
+        st.markdown("<span style='color:red'>☠ Modelo árbol de decisión predice que esta persona saldría muerta del accidente</span>", unsafe_allow_html=True)
 
 PAGES = {
     "Inicio": inicio,
