@@ -47,16 +47,6 @@ def encode_column(df, column_name):
         df[column_name] = le.fit_transform(df[column_name].astype(str))
     return df
 
-"""
-def inicio():
-    df = get_data()
-    csv = convert_df(df)
-    st.title("Equipo 1")
-    st.header("Accidentes de Tráfico en Jalisco")
-    image = Image.open('traffic_light.png')
-    st.image(image, caption='Traffico de Guadalajara')
-    st.text("Brenda Cristina Yepiz\nHéctor Calderón Reyes\nAxel Jarquín\nJohn Paul Cueva Osete")
-"""
 def inicio():
     df = get_data()
     csv = convert_df(df)
@@ -78,7 +68,7 @@ def inicio():
         st.image("Hector.jpg")  # Asegúrate de tener la imagen en la ruta especificada
 
     with col3:
-        st.header("Axel Jarquín")
+        st.header("Axel Jarquín Morga")
         st.image("Axel.jpg")  # Asegúrate de tener la imagen en la ruta especificada
 
     with col4:
@@ -391,6 +381,93 @@ def visualizaciones():
     sns.heatmap(corr_matrix_spearman, annot=True, cmap='coolwarm', ax=ax)
     st.pyplot(fig)
 
+def regresionLog():
+    # Seleccionar las variables relevantes
+    variables_relevantes = ['tipo_usuario', 'dia_sem', 'rango_hora']
+
+    # Convertir las variables categóricas a números
+    label_encoders = {}
+    for col in variables_relevantes:
+        le = LabelEncoder()
+        df[col] = le.fit_transform(df[col])
+        label_encoders[col] = le
+
+    # Dividir los datos en conjuntos de entrenamiento y prueba
+    X = df[variables_relevantes]
+    y = df['dileso']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Crear y entrenar el modelo de regresión logística
+    modelo = LogisticRegression()
+    modelo.fit(X_train, y_train)
+
+    # Evaluar el modelo
+    st.markdown(f'*Puntuación del modelo:* {modelo.score(X_test, y_test)}')
+
+    # Realizar predicciones
+    y_pred = modelo.predict(X_test)
+
+    # Crear un histograma de las predicciones y los valores reales
+    fig, ax = plt.subplots(figsize=(10, 6))  # Crea una nueva figura con un subplot
+    ax.hist([y_pred, y_test], label=['Predicciones', 'Valores Reales'], bins=np.arange(3)-0.5, edgecolor='black')
+    ax.legend(loc='upper right')
+    ax.set_xticks([0,1])
+    ax.set_title('Comparación de Predicciones y Valores Reales')
+
+    st.pyplot(fig)  # Muestra la figura en Streamlit
+
+    plt.subplots_adjust(hspace = 0.5)  # Agregar espacio entre las dos gráficas
+
+    # Calcular la matriz de confusión
+    cm = confusion_matrix(y_test, y_pred)
+
+    # Crear un dataframe para visualizar mejor la matriz de confusión
+    cm_df = pd.DataFrame(cm, index=[0,1], columns=[0,1])
+
+    # Crear una figura y un conjunto de ejes
+    fig, ax = plt.subplots()
+
+    # Crear un mapa de calor de la matriz de confusión utilizando seaborn
+    sns.heatmap(cm_df, annot=True, cmap='Blues', fmt='g', ax=ax)
+    ax.set_title('Matriz de confusión')
+    ax.set_xlabel('Predicciones')
+    ax.set_ylabel('Valores reales')
+
+    # Mostrar la figura en Streamlit
+    st.pyplot(fig)
+
+    # Añadir menús desplegables para las variables de entrada en la barra lateral
+    tipo_usuario = st.sidebar.selectbox('Tipo de Usuario', label_encoders['tipo_usuario'].classes_)
+    dia_sem = st.sidebar.selectbox('Día de la Semana', label_encoders['dia_sem'].classes_)
+    rango_hora = st.sidebar.selectbox('Rango de Hora', label_encoders['rango_hora'].classes_)
+
+    # Codificar la entrada del usuario
+    user_input = pd.DataFrame([[tipo_usuario, dia_sem, rango_hora]])
+    for col in range(user_input.shape[1]):
+        user_input[col] = label_encoders[variables_relevantes[col]].transform(user_input[col])
+
+    # Realizar una predicción para la entrada del usuario
+    user_pred = modelo.predict(user_input)
+    
+    # Decodificar la predicción antes de desplegarla
+    user_pred = ['Ileso' if pred == 1 else 'Herido o Fallecido' for pred in user_pred]
+    st.sidebar.write(f'La prediccion para los valores seleccionados es: {user_pred[0]}')
+    
+    # Crear una gráfica de barras para la predicción del usuario
+    fig, ax = plt.subplots()
+    ax.bar([0], [1] if user_pred[0] == 'Ileso' else [0], label='Ileso', color='g')
+    ax.bar([1], [1] if user_pred[0] == 'Herido o Fallecido' else [0], label='Herido o Fallecido', color='r')
+    ax.set_xticks([0,1])
+    ax.set_xticklabels(['Ileso', 'Herido o Fallecido'])
+    ax.set_ylim([0,1])
+    ax.set_ylabel('Predicción')
+    ax.set_title('Predicción del Modelo para la Entrada del Usuario')
+    ax.legend()
+
+    # Mostrar la figura en Streamlit
+    st.pyplot(fig)
+    
 def prediccion():
     st.markdown("# Predicción")
     st.markdown("## Predice si una persona saldría ilesa o no de un accidente")
@@ -458,18 +535,18 @@ def prediccion():
 
     # Mostrar las predicciones y sus probabilidades
     st.markdown("### Predicciones y sus probabilidades")
-    st.markdown(f"**Predicción con regresión logística:** {original_labels_lr[0]}")
-    st.markdown(f"**Probabilidad de la predicción con regresión logística:** {max(logistic_regression_proba[0])}")
-    st.markdown(f"**Predicción con árbol de clasificación:** {original_labels_ct[0]}")
-    st.markdown(f"**Probabilidad de la predicción con árbol de clasificación:** {max(classification_tree_proba[0])}")
+    st.markdown(f"*Predicción con regresión logística:* {original_labels_lr[0]}")
+    st.markdown(f"*Probabilidad de la predicción con regresión logística:* {max(logistic_regression_proba[0])}")
+    st.markdown(f"*Predicción con árbol de clasificación:* {original_labels_ct[0]}")
+    st.markdown(f"*Probabilidad de la predicción con árbol de clasificación:* {max(classification_tree_proba[0])}")
 
     # Imprimir los valores seleccionados y los datos de entrada codificados
     st.markdown("---")
     st.markdown("### Valores seleccionados y datos de entrada codificados")
-    st.markdown(f"**Valores seleccionados:** Tipo de usuario = {tipo_usuario}, Día de la semana = {dia_sem}, Rango de hora = {rango_hora}")
-    st.markdown(f"**Datos de entrada codificados:** {input_data}")
+    st.markdown(f"*Valores seleccionados:* Tipo de usuario = {tipo_usuario}, Día de la semana = {dia_sem}, Rango de hora = {rango_hora}")
+    st.markdown(f"*Datos de entrada codificados:* {input_data}")
 
-    # Verificar las predicciones y mostrar los mensajes correspondientes
+   # Verificar las predicciones y mostrar los mensajes correspondientes
     st.markdown("---")
     st.markdown("### Resultados de las predicciones")
     if logistic_regression_prediction[0] == 1:
@@ -485,15 +562,9 @@ def prediccion():
         st.markdown("<span style='color:red'>😵‍💫 Modelo árbol de decisión predice que esta persona saldría herida del accidente</span>", unsafe_allow_html=True)
     else:
         st.markdown("<span style='color:red'>☠ Modelo árbol de decisión predice que esta persona saldría muerta del accidente</span>", unsafe_allow_html=True)
-
-PAGES = {
-    "Inicio": inicio,
-    "Datos": datos,
-    "Mapa": mapa,
-    "Análisis": analisis,
-    "Visualizaciones": visualizaciones,
-    "Predicción": prediccion
-}
+    st.markdown("---")
+    st.markdown("### Modelo predictivo de Regresión Logística sobre dileso")
+    regresionLog()
 
 def main():
     st.sidebar.title("Navegación")
