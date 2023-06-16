@@ -1,0 +1,3 @@
+Link publico streamlit:
+
+https://axjar-streamlit-app-main-qdvaf8.streamlit.app/
