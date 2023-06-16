@@ -55,8 +55,8 @@ def inicio():
     csv = convert_df(df)
     st.title("Equipo 1")
     st.header("Accidentes de Tráfico en Jalisco")
-    image = Image.open('traffic_light.png')
-    st.image(image, caption='Traffico de Guadalajara')
+    image = Image.open('Fotos/traffic_light.png')
+    st.image(image, caption='Fotos/Traffico de Guadalajara')
 
     st.header("Nuestro Equipo")
 
@@ -64,25 +64,25 @@ def inicio():
 
     with col1:
         st.header("Brenda Cristina Yepiz")
-        st.image("Brenda.jpg")  # Asegúrate de tener la imagen en la ruta especificada
+        st.image("Fotos/Brenda.jpg")  # Asegúrate de tener la imagen en la ruta especificada
 
     with col2:
         st.header("Héctor Calderón Reyes")
-        st.image("Hector.jpg")  # Asegúrate de tener la imagen en la ruta especificada
+        st.image("Fotos/Hector.jpg")  # Asegúrate de tener la imagen en la ruta especificada
 
     with col3:
         st.header("Axel Jarquín Morga")
-        st.image("Axel.jpg")  # Asegúrate de tener la imagen en la ruta especificada
+        st.image("Fotos/Axel.jpg")  # Asegúrate de tener la imagen en la ruta especificada
 
     with col4:
         st.header("John Paul Cueva Osete")
-        st.image("JP.jpg")  # Asegúrate de tener la imagen en la ruta especificada
+        st.image("Fotos/JP.jpg")  # Asegúrate de tener la imagen en la ruta especificada
         
 def datos():
     df = get_data()
     csv = convert_df(df)
     st.header("Datos")
-    imagen = Image.open('city.png')
+    imagen = Image.open('Fotos/city.png')
     st.image(imagen, caption='Satelital')
     # Paso 1 - Ordenar
     st.subheader("Ordenar en tablas")
